@@ -57,38 +57,26 @@ public class MainActivity extends FragmentActivity {
             switch (item.getItemId()) {
                 case R.id.navigation_translate:
                     Log.d("MyTag", "navigation_translate");
-                    if(fragmentManager.findFragmentByTag(TranslateFragment.TAG) == null) {
-                        fragmentTransaction.add(R.id.container, translateFragment, TranslateFragment.TAG);
-                        fragmentTransaction.commit();
-                    }
-                    if(fragmentManager.findFragmentByTag(TranslateFragment.TAG) != null){
+                    //if(fragmentManager.findFragmentByTag(TranslateFragment.TAG) != null){
                         fragmentTransaction.replace(R.id.container, translateFragment, TranslateFragment.TAG);
                         fragmentTransaction.commit();
-                    }
+                    //}
                     return true;
 
                 case R.id.navigation_history:
                     Log.d("MyTag", "navigation_history");
-                    if(fragmentManager.findFragmentByTag(HistoryFragment.TAG) == null){
-                        fragmentTransaction.add(R.id.container, historyFragment, HistoryFragment.TAG);
-                        fragmentTransaction.commit();
-                    }
-                    if(fragmentManager.findFragmentByTag(HistoryFragment.TAG) != null){
+                    //if(fragmentManager.findFragmentByTag(HistoryFragment.TAG) != null){
                         fragmentTransaction.replace(R.id.container, historyFragment, HistoryFragment.TAG);
                         fragmentTransaction.commit();
-                    }
+                    //}
                     return true;
 
                 case R.id.navigation_settings:
                     Log.d("MyTag", "navigation_settings");
-                    if(fragmentManager.findFragmentByTag(SettingsFragment.TAG) == null){
-                        fragmentTransaction.add(R.id.container, settingsFragment, SettingsFragment.TAG);
-                        fragmentTransaction.commit();
-                    }
-                    if(fragmentManager.findFragmentByTag(SettingsFragment.TAG) != null){
+                    //if(fragmentManager.findFragmentByTag(SettingsFragment.TAG) != null){
                         fragmentTransaction.replace(R.id.container, settingsFragment, SettingsFragment.TAG);
                         fragmentTransaction.commit();
-                    }
+                    //}
                     return true;
             }
 
