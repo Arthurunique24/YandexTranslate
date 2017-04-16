@@ -32,13 +32,13 @@ public class TranslateFragment extends Fragment implements View.OnClickListener{
 
     EditText editTextTranslate;
     Button btnTranslate;
-    TextView tvTranslatedText;
+    TextView tvTranslatedText, tvTextToTranslate;
 
-    String[] langOne = {"ru", "en"};
-    String[] langTwo = {"ru", "en"};
+    String[] langOne = {"ru", "en", "de", "fr", "ja"};
+    String[] langTwo = {"ru", "en", "de", "fr", "ja"};
 
-    //Spinner spinner1;
-    //Spinner spinner2;
+    Spinner spinner1;
+    Spinner spinner2;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -49,8 +49,9 @@ public class TranslateFragment extends Fragment implements View.OnClickListener{
         btnTranslate = (Button) rootView.findViewById(R.id.btnTranslate);
         btnTranslate.setOnClickListener(this);
         tvTranslatedText = (TextView) rootView.findViewById(R.id.tvTranslatedText);
+        tvTextToTranslate = (TextView) rootView.findViewById(R.id.tvTextToTranslate);
 
-        /*spinner1 = (Spinner) rootView.findViewById(R.id.spinner1);
+        spinner1 = (Spinner) rootView.findViewById(R.id.spinner1);
         spinner2 = (Spinner) rootView.findViewById(R.id.spinner2);
 
         ArrayAdapter<String> arrayAdapter1 =  new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, langOne);
@@ -60,7 +61,7 @@ public class TranslateFragment extends Fragment implements View.OnClickListener{
         arrayAdapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         spinner1.setAdapter(arrayAdapter1);
-        spinner2.setAdapter(arrayAdapter2);*/
+        spinner2.setAdapter(arrayAdapter2);
 
         getActivity();
         return rootView;
@@ -97,9 +98,8 @@ public class TranslateFragment extends Fragment implements View.OnClickListener{
         }
     }
 
-    private static String translate(String lang, String input) throws IOException {
+    private static String translate(String lang,  String input) throws IOException {
         String urlStr = "https://translate.yandex.net/api/v1.5/tr.json/translate?key=trnsl.1.1.20170331T115220Z.3987a8b36f2c7b04.7eb1b41bfc32a9536510568f7db47d0d9437f49c";
-
         URL urlObj = new URL(urlStr);
 
         HttpsURLConnection connection = (HttpsURLConnection) urlObj.openConnection();
@@ -114,10 +114,10 @@ public class TranslateFragment extends Fragment implements View.OnClickListener{
         int end = json.indexOf("]");
         String translated = json.substring(start + 2, end - 1);
         i++;
-        if (translated.equals(input) && i < 2) {
+        /*if (translated.equals(input) && i < 2) {
             // if return equal of entered text - we need change direction of translation
             return translate("en", input);
-        } else return translated;
+        } else */return translated;
     }
 
     @Override
@@ -130,9 +130,13 @@ public class TranslateFragment extends Fragment implements View.OnClickListener{
                 if(!Objects.equals(editTextTranslate.getText().toString(), "")) {
                     TranslateText translateText;
                     translateText = new TranslateText();
-                    //String langInSpinner1 = spinner1.getSelectedItem().toString();
-                    translateText.execute("ru", textToTranslate);
-                    //translateText.execute(langInSpinner1, textToTranslate);
+                    //translateText.execute("en-vi", textToTranslate);
+
+                    String langToTranslate = spinner1.getSelectedItem().toString();
+                    String langTranslated = spinner2.getSelectedItem().toString();
+                    translateText.execute(langToTranslate + "-" + langTranslated, textToTranslate);
+
+                    tvTextToTranslate.setText(editTextTranslate.getText().toString());
                     editTextTranslate.setText("");
                 }
                 else {
