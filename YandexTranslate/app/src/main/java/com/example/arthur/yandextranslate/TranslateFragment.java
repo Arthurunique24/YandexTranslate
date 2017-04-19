@@ -25,6 +25,8 @@ import java.util.Objects;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import io.realm.Realm;
+
 public class TranslateFragment extends Fragment implements View.OnClickListener{
 
     public static final String TAG = "TranslateFragmentTag";
@@ -39,6 +41,8 @@ public class TranslateFragment extends Fragment implements View.OnClickListener{
 
     Spinner spinner1;
     Spinner spinner2;
+
+    private Realm realm;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -63,9 +67,17 @@ public class TranslateFragment extends Fragment implements View.OnClickListener{
         spinner1.setAdapter(arrayAdapter1);
         spinner2.setAdapter(arrayAdapter2);
 
+        realm = Realm.getInstance(getContext());
+
         getActivity();
         return rootView;
         //return inflater.inflate(R.layout.activity_translate_fragment, null);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        realm.close();
     }
 
     private class TranslateText extends AsyncTask<String, String, String> {
@@ -95,6 +107,14 @@ public class TranslateFragment extends Fragment implements View.OnClickListener{
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             tvTranslatedText.setText(translatedText);
+
+            realm.beginTransaction();
+
+            HistoryRealm historyRealm = realm.createObject(HistoryRealm.class);
+            historyRealm.setRealmTextToTranslate(tvTextToTranslate.getText().toString());
+            historyRealm.setRealmTranslatedText(tvTranslatedText.getText().toString());
+
+            realm.commitTransaction();
         }
     }
 
@@ -137,6 +157,16 @@ public class TranslateFragment extends Fragment implements View.OnClickListener{
                     translateText.execute(langToTranslate + "-" + langTranslated, textToTranslate);
 
                     tvTextToTranslate.setText(editTextTranslate.getText().toString());
+
+                    //Realm Add
+//                    realm.beginTransaction();
+//
+//                    HistoryRealm historyRealm = realm.createObject(HistoryRealm.class);
+//                    historyRealm.setRealmTextToTranslate(tvTextToTranslate.getText().toString());
+//                    historyRealm.setRealmTranslatedText(tvTranslatedText.getText().toString());
+//
+//                    realm.commitTransaction();
+
                     editTextTranslate.setText("");
                 }
                 else {

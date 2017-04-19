@@ -21,12 +21,17 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.Realm;
+import io.realm.RealmResults;
+
 public class HistoryFragment extends Fragment {
 
     public static final String TAG = "HistoryFragmentTag";
 
-    private List<History> historyList;
+    private List<History> historyList = new ArrayList<>();
     private RecyclerView recyclerView;
+
+    private Realm realm;
 
     @TargetApi(Build.VERSION_CODES.GINGERBREAD)
     @Override
@@ -40,7 +45,27 @@ public class HistoryFragment extends Fragment {
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setHasFixedSize(true);
 
-        initializeData();
+        realm = Realm.getInstance(getContext());
+
+        realm.beginTransaction();
+
+        RealmResults<HistoryRealm> historyRealms = realm.where(HistoryRealm.class).findAll();
+
+        if(!historyRealms.isEmpty()){
+            for(int i = historyList.size(); i < historyRealms.size(); ++i){
+                initializeData(historyRealms.get(i).getRealmTextToTranslate(), historyRealms.get(i).getRealmTranslatedText());
+            }
+        }
+
+        //Delete all history
+//        for(int i = 0; i < historyRealms.size(); ++i){
+//            historyRealms.get(i).removeFromRealm();
+//        }
+
+
+        realm.commitTransaction();
+
+        //initializeData("hello", "Дратути");
         initializeAdapter();
 
         getActivity();
@@ -48,11 +73,14 @@ public class HistoryFragment extends Fragment {
         //return inflater.inflate(R.layout.activity_history_fragment, null);
     }
 
-    private void initializeData(){
-        historyList = new ArrayList<>();
-        historyList.add(new History("Hello", "Привет"));
-        historyList.add(new History("kek", "lol"));
-        historyList.add(new History("Arthur", "Vika"));
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        realm.close();
+    }
+
+    private void initializeData(String textToTranslate, String translatedtext){
+        historyList.add(new History(textToTranslate, translatedtext));
     }
 
     @TargetApi(Build.VERSION_CODES.GINGERBREAD)
