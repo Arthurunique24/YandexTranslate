@@ -12,7 +12,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="textPersonName"
+        android:inputType="textCapSentences|textMultiLine"
         android:hint="@string/editTextTranslate"
         android:layout_marginLeft="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -39,61 +39,65 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp" />
 
-    <TextView
-        android:id="@+id/tvTextToTranslate"
-        android:layout_width="395dp"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Text"
-        tools:layout_editor_absoluteX="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@+id/btnTranslate"/>
+        android:id="@+id/reLayoutText"
+        app:layout_constraintTop_toBottomOf="@+id/btnTranslate"
+        >
 
-    <TextView
-        android:id="@+id/tvTranslatedText"
-        android:layout_width="395dp"
-        android:layout_height="wrap_content"
-        android:hint="Translated text"
-        android:textSize="20sp"
-        tools:layout_editor_absoluteX="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@+id/tvTextToTranslate" />
+        <TextView
+            android:id="@+id/tvTextToTranslate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:layout_editor_absoluteX="8dp"
+            android:layout_marginTop="8dp" />
 
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        android:layout_marginTop="31dp"
-        app:layout_constraintTop_toBottomOf="@+id/tvTextToTranslate"
-        android:layout_marginLeft="8dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginRight="8dp"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        android:layout_marginBottom="320dp"
-        app:layout_constraintVertical_bias="0.0">
-
+        <TextView
+            android:id="@+id/tvTranslatedText"
+            android:layout_width="395dp"
+            android:layout_height="wrap_content"
+            android:hint="Select languages for translation"
+            android:textSize="20sp"
+            tools:layout_editor_absoluteX="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_below="@+id/tvTextToTranslate"
+            app:layout_constraintTop_toBottomOf="@+id/tvTextToTranslate" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/textViewFrom"
+            android:layout_below="@+id/tvTranslatedText"
+            app:layout_constraintTop_toBottomOf="@+id/tvTranslatedText"
             android:text="From"/>
 
         <Spinner
             android:id="@+id/spinner1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textViewFrom"
+            app:layout_constraintTop_toBottomOf="@+id/textViewFrom"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/textViewTo"
+            android:layout_below="@+id/spinner1"
+            app:layout_constraintTop_toBottomOf="@+id/spinner1"
             android:text="To"/>
 
         <Spinner
             android:id="@+id/spinner2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textViewTo"
+            app:layout_constraintTop_toBottomOf="@+id/textViewTo"/>
+
+    </RelativeLayout>
+
+
+
 
 
 </android.support.constraint.ConstraintLayout>

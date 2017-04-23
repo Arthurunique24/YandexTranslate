@@ -8,6 +8,7 @@ import android.support.design.widget.SwipeDismissBehavior;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -47,25 +48,20 @@ public class HistoryFragment extends Fragment {
 
         realm = Realm.getInstance(getContext());
 
+        //Add histoy in hitoryFragment
         realm.beginTransaction();
-
         RealmResults<HistoryRealm> historyRealms = realm.where(HistoryRealm.class).findAll();
-
         if(!historyRealms.isEmpty()){
             for(int i = historyList.size(); i < historyRealms.size(); ++i){
                 initializeData(historyRealms.get(i).getRealmTextToTranslate(), historyRealms.get(i).getRealmTranslatedText());
             }
         }
-
-        //Delete all history
-//        for(int i = 0; i < historyRealms.size(); ++i){
-//            historyRealms.get(i).removeFromRealm();
-//        }
-
-
+        else {
+            historyList.clear();
+            Toast.makeText(getActivity(), "Nothing in history :( ", Toast.LENGTH_LONG).show();
+        }
         realm.commitTransaction();
 
-        //initializeData("hello", "Дратути");
         initializeAdapter();
 
         getActivity();

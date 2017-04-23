@@ -36,8 +36,9 @@ public class TranslateFragment extends Fragment implements View.OnClickListener{
     Button btnTranslate;
     TextView tvTranslatedText, tvTextToTranslate;
 
-    String[] langOne = {"ru", "en", "de", "fr", "ja"};
-    String[] langTwo = {"ru", "en", "de", "fr", "ja"};
+    String[] languageSpinners = {"ru", "en", "de", "fr", "ja"};
+    String[] language = {"Russian", "English", "Deutsche", "French", "Japanese"};
+    //String[] langTwo = {"ru", "en", "de", "fr", "ja"};
 
     Spinner spinner1;
     Spinner spinner2;
@@ -58,10 +59,11 @@ public class TranslateFragment extends Fragment implements View.OnClickListener{
         spinner1 = (Spinner) rootView.findViewById(R.id.spinner1);
         spinner2 = (Spinner) rootView.findViewById(R.id.spinner2);
 
-        ArrayAdapter<String> arrayAdapter1 =  new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, langOne);
+        //Initialize Adapters for spinners
+        ArrayAdapter<String> arrayAdapter1 =  new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, language);
         arrayAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        ArrayAdapter<String> arrayAdapter2 =  new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, langTwo);
+        ArrayAdapter<String> arrayAdapter2 =  new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, language);
         arrayAdapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         spinner1.setAdapter(arrayAdapter1);
@@ -97,7 +99,6 @@ public class TranslateFragment extends Fragment implements View.OnClickListener{
                 e.printStackTrace();
             }
             Log.d("MyTag", translatedTextInBackground);
-
             translatedText = translatedTextInBackground;
 
             return translatedTextInBackground;
@@ -108,12 +109,11 @@ public class TranslateFragment extends Fragment implements View.OnClickListener{
             super.onPostExecute(s);
             tvTranslatedText.setText(translatedText);
 
+            //Add history in realm after "doInBackground"
             realm.beginTransaction();
-
             HistoryRealm historyRealm = realm.createObject(HistoryRealm.class);
             historyRealm.setRealmTextToTranslate(tvTextToTranslate.getText().toString());
             historyRealm.setRealmTranslatedText(tvTranslatedText.getText().toString());
-
             realm.commitTransaction();
         }
     }
@@ -152,22 +152,19 @@ public class TranslateFragment extends Fragment implements View.OnClickListener{
                     translateText = new TranslateText();
                     //translateText.execute("en-vi", textToTranslate);
 
-                    String langToTranslate = spinner1.getSelectedItem().toString();
-                    String langTranslated = spinner2.getSelectedItem().toString();
+                    //String langToTranslate = spinner1.getSelectedItem().toString();
+                    //String langTranslated = spinner2.getSelectedItem().toString();
+                    //translateText.execute(langToTranslate + "-" + langTranslated, textToTranslate);
+                    String langToTranslate = languageSpinners[spinner1.getSelectedItemPosition()];
+                    String langTranslated = languageSpinners[spinner2.getSelectedItemPosition()];
+
                     translateText.execute(langToTranslate + "-" + langTranslated, textToTranslate);
 
                     tvTextToTranslate.setText(editTextTranslate.getText().toString());
-
-                    //Realm Add
-//                    realm.beginTransaction();
-//
-//                    HistoryRealm historyRealm = realm.createObject(HistoryRealm.class);
-//                    historyRealm.setRealmTextToTranslate(tvTextToTranslate.getText().toString());
-//                    historyRealm.setRealmTranslatedText(tvTranslatedText.getText().toString());
-//
-//                    realm.commitTransaction();
-
                     editTextTranslate.setText("");
+
+                    spinner1.onSaveInstanceState();
+                    spinner2.onSaveInstanceState();
                 }
                 else {
                     Toast.makeText(getActivity(), "Incorrect text", Toast.LENGTH_LONG).show();
@@ -175,4 +172,6 @@ public class TranslateFragment extends Fragment implements View.OnClickListener{
                 break;
         }
     }
+
+    
 }

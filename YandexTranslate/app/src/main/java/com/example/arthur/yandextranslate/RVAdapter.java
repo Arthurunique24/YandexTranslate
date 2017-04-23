@@ -2,10 +2,12 @@ package com.example.arthur.yandextranslate;
 
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -46,10 +48,20 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.HistoryViewHolder>
     public void onBindViewHolder(HistoryViewHolder historyViewHolder, int position) {
         historyViewHolder.historyTranslatedText.setText(historyList.get(position).translatedText);
         historyViewHolder.historyTextToTranslate.setText(historyList.get(position).textToTranslate);
+
+        historyViewHolder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("MyTag", "Click clack");
+                CardView cardView = null;
+                cardView.getCardElevation();
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
         return historyList.size();
     }
+
 }
